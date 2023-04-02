@@ -1,4 +1,5 @@
 import ballerina/http;
+import ballerina/log;
 
 type Album readonly & record {|
     string title;
@@ -17,8 +18,12 @@ service class RequestInterceptor {
     // Then, the execution will jump to the nearest `RequestErrorInterceptor`.
     resource function 'default [string... path](
             http:RequestContext ctx,
-            @http:Header {name: "x-api-version"} string xApiVersion)
+            @http:Header {name: "x-api-version"} string xApiVersion, http:Headers headers)
         returns http:NotImplemented|http:NextService|error? {
+        string[] keys = headers.getHeaderNames();
+        foreach var item in keys {
+            log:printInfo("header name: "+item);
+        }
         // Checks the API version header.    
         if xApiVersion != "v1" {
             return http:NOT_IMPLEMENTED;
