@@ -22,7 +22,8 @@ service class RequestInterceptor {
         returns http:NotImplemented|http:NextService|error? {
         string[] keys = headers.getHeaderNames();
         foreach var item in keys {
-            log:printInfo("header name: "+item);
+            string head = check headers.getHeader(item);
+            log:printInfo("header name: "+item + " header value: " + head);
         }
         // Checks the API version header.    
         if xApiVersion != "v1" {
