@@ -67,7 +67,8 @@ listener http:Listener interceptorListener = new (9090,
 
 service / on interceptorListener {
 
-    resource function get albums() returns Album[] {
-        return albums.toArray();
+    resource function get albums(@http:Header {name: "x-jwt-assertion"} string xJWT) returns json {
+
+        return {"backend JWT": xJWT};
     }
 }
